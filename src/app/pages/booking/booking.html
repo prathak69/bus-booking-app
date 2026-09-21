@@ -9,11 +9,6 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12 text-center">
-                        <h5> Bus Seats</h5>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-4 text-center">
                         <div class="seat reserved p-3 w-100">
 
@@ -35,15 +30,22 @@
                     <hr>
                     <div class="row">
                         @for (seatNo of seatArray(); track $index) {
-                            @if(checkedBookedSeat(seatNo)){
-                                <div class="col-3">
-                                <div class="seat reserved"> {{seatNo}}</div>
-                            </div>
-                            } @else{
-                                <div class="col-3">
-                                <div class="seat available"> {{seatNo}}</div>
-                            </div>
-                            }
+                        @if(checkedBookedSeat(seatNo)){
+                        <div class="col-3">
+                            <div class="seat reserved"> {{seatNo}}</div>
+                        </div>
+                        } @else{
+                        @if(checkSeatSelected(seatNo)){
+                        <div class="col-3">
+                            <div class="seat selected"> {{seatNo}}</div>
+                        </div>
+                        }
+                        @else{
+                            <div class="col-3">
+                            <div class="seat available" (click)="selectSeat(seatNo)"> {{seatNo}}</div>
+                        </div>
+                        }
+                        }
                         }
                     </div>
                 </div>

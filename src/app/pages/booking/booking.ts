@@ -12,7 +12,8 @@ export class Booking implements OnInit {
   scheduleId = signal<Number>(0)
   scheduleData = signal<any>({})
   seatArray  = signal<Number[]>([])
-  bookedSeatArray = signal<Number[]>([]);
+  bookedSeatArray = signal<Set<number>>(new Set());
+  selectedSeatArray = signal<Set<number>>(new Set());
 
   activatedRoute = inject(ActivatedRoute)
   apiService = inject(Master)
@@ -49,7 +50,7 @@ ngOnInit(): void {
   }
 
   getBookedSeats(){
-    this.apiService.getBookedSeats(this.scheduleId).subscribe({
+    this.apiService.getBookedSeats(this.scheduleId()).subscribe({
       next: (res:any)=>{
         this.bookedSeatArray.set(res)
       },
@@ -63,7 +64,31 @@ ngOnInit(): void {
   }
 
   checkedBookedSeat(seatNo:any){
-    return this.bookedSeatArray().includes(seatNo);
+    return this.bookedSeatArray().has(seatNo);
+  }
+
+  checkSeatSelected(seatNo:any){
+    return this.selectedSeatArray().has(seatNo);
+  }
+
+  selectSeat(seatNo:any){
+    if(this.checkedBookedSeat(seatNo)) return;
+
+    this.selectedSeatArray.update(currectSet => {
+      const nextSet = new Set(currectSet);
+      if(nextSet.has(seatNo)){
+        nextSet.delete(seatNo);
+      }else{
+        nextSet.add(seatNo)
+      }
+      return nextSet;
+  })
+
+    // this.selectedSeatArray.update(seats => (
+    //   seats.includes(seatNo) ?
+    //   seats.filter(seat => seat != seatNo):
+    //   [...seats, seatNo]
+    // ))
   }
 
 }
