@@ -37,7 +37,7 @@
                         } @else{
                         @if(checkSeatSelected(seatNo)){
                         <div class="col-3">
-                            <div class="seat selected"> {{seatNo}}</div>
+                            <div class="seat selected" (click)="selectSeat(seatNo)"> {{seatNo}}</div>
                         </div>
                         }
                         @else{
@@ -49,6 +49,38 @@
                         }
                     </div>
                 </div>
+            </div>
+
+            <div class="col-8" [formGroup]="bookingForm">
+                <div formArrayName="BusBookingPassengers">
+                    @for(passenger of passengers.controls; track $index){
+                        <div class="row mb-2" [formGroupName]="$index">
+                            <div class="col-3">
+                                <label>Passenger Name</label>
+                                <input type="text" formControlName="passengerName" class="form-control">
+                            </div>
+                            <div class="col-3">
+                                <label>Age</label>
+                                <input type="number" formControlName="age" class="form-control">
+                            </div>
+                            <div class="col-3">
+                                <label>Gender</label>
+                                <select formControlName="gender" class="form-select"> 
+                                    <option value="">Select</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <label>seat number</label>
+                                <input type="number" formControlName="seatNo" class="form-control" readonly>
+                            </div>
+                        </div>
+                    }
+                </div>
+                @if(selectedSeatArray().length){
+                    <button (click)="postBusBooking()" class="btn btn-primary mt-4">Book</button>
+                }
             </div>
         </div>
     </div>

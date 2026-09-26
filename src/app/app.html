@@ -1,1 +1,104 @@
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(171 177 183) !important;">
+  <div class="container">
+    <a class="navbar-brand" [routerLink]="['/search']">
+      <img src="https://s3.rdbuz.com/Images/rdc/rdc-redbus-logo.webp" style="width: 5rem;" alt="redbus logo">
+    </a>
+    <div class="d-flex flex-column justify-content-center">
+      <span>Trusted by</span>
+      <span class="fw-bold">5 Crore+ Travellers</span>
+    </div>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/search']"><i class="bi bi-bus me-1"></i>Buses</a>
+        </li>
+        <li class="nav-item" style="display: flex;">
+          @if(loggedUserdata()){
+            <a class="nav-link text-success" style="cursor: pointer;">
+            <i class="bi bi-person me-1"></i>{{loggedUserdata()?.userName}}
+          </a>
+            <a class="nav-link text-danger" style="cursor: pointer;" (click)="logOut()">
+            <i class="bi bi-person me-1"></i>Logout
+          </a>
+          }
+          @else{
+            <a class="nav-link text-danger" style="cursor: pointer;" (click)="openModel()">
+            <i class="bi bi-person me-1"></i>Login / Sign Up
+          </a>
+          }
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
 <router-outlet />
+
+<!-- Native HTML5 Dialog -->
+<dialog #authDialog class="auth-dialog shadow rounded-3 p-0 border-0" (click)="onBackdropClick($event)">
+  <div class="modal-dialog m-0" role="document">
+    <div class="modal-content border-0">
+      <div class="modal-header d-flex justify-content-between align-items-center p-3 border-bottom">
+        <h5 class="modal-title m-0">{{ isLoginForm() ? 'Sign In' : 'Register' }}</h5>
+        <button type="button" class="btn-close" (click)="closeModel()" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body p-4">
+        @if (isLoginForm()) {
+          <form>
+            <div class="mb-3">
+              <label class="form-label" for="loginUser">User Name</label>
+              <input type="text" id="loginUser" name="userName" [(ngModel)]="loginObj.userName" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="loginPass">Password</label>
+              <input type="password" id="loginPass" name="password" [(ngModel)]="loginObj.password" class="form-control" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mb-3" (click)="login()">Sign In</button>
+
+            <div class="text-center">
+              <p class="mb-0">Not a member? 
+                <a role="button" class="text-primary text-decoration-underline" (click)="isLoginForm.set(false)">Register</a>
+              </p>
+            </div>
+          </form>
+        } @else {
+          <form (ngSubmit)="registerUser()">
+            <div class="mb-3">
+              <label class="form-label" for="userName">User Name</label>
+              <input type="text" id="userName" name="userName" [(ngModel)]="registerObj.userName" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="emailId">Email address</label>
+              <input type="email" id="emailId" name="emailId" [(ngModel)]="registerObj.emailId" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="fullName">Full Name</label>
+              <input type="text" id="fullName" name="fullName" [(ngModel)]="registerObj.fullName" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="password">Password</label>
+              <input type="password" id="password" name="password" [(ngModel)]="registerObj.password" class="form-control" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mb-3">Register</button>
+
+            <div class="text-center">
+              <p class="mb-0">Already a member? 
+                <a role="button" class="text-primary text-decoration-underline" (click)="isLoginForm.set(true)">Login</a>
+              </p>
+            </div>
+          </form>
+        }
+      </div>
+    </div>
+  </div>
+</dialog>

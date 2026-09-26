@@ -30,10 +30,22 @@ export class Master {
     return this.http.get(this.baseUrl+'GetBusScheduleById', {params})
   }
 
-  getBookedSeats(scheduleId:any){
-    const params= {
-      id:scheduleId
-    }
-    return this.http.get(this.baseUrl+'getBookedSeats', {params})
+  getBookedSeats(scheduleId: any) {
+    const params = {
+      shceduleId: scheduleId
+    };
+    return this.http.get(this.baseUrl + 'getBookedSeats', { params });
+  }
+
+  addNewUser(registerObj:any){
+    return this.http.post(this.baseUrl+'AddNewUser', registerObj)
+  }
+
+  login(loginObj:any){
+    return this.http.post(this.baseUrl+'login', loginObj)
+  }
+
+  postBusBooking(bookingObj:any){
+    return this.http.post(this.baseUrl+'PostBusBooking', bookingObj)
   }
 }
