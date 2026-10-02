@@ -1,0 +1,151 @@
+<div class="container mt-5">
+  <!-- Bus Schedule Form -->
+  <div class="card">
+    <div class="card-header bg-primary text-white">Bus Schedule Form</div>
+    <div class="card-body">
+      <form id="scheduleForm" [formGroup]="busScheduleForm" (ngSubmit)="submitBusForm()">
+        <div class="row">
+          <div class="col-3">
+            <div class="mb-3">
+              <label for="busName" class="form-label">Bus Name</label>
+              <input
+                formControlName="busName"
+                type="text"
+                class="form-control"
+                id="busName"
+                placeholder="Enter bus name"
+              />
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="mb-3">
+              <label for="busVehicleNo" class="form-label">Bus Vehicle No</label>
+              <input
+                type="text"
+                class="form-control"
+                id="busVehicleNo"
+                formControlName="busVehicleNo"
+                placeholder="Enter bus vehicle number"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-3">
+            <div class="mb-3">
+              <label for="fromLocation" class="form-label">From Location</label>
+              <select formControlName="fromLocation" class="form-select" id="fromLocation">
+                <option value="">Select Location</option>
+                @for (location of locations(); track location.locationId) {
+                  <option value="{{ location.locationId }}">{{ location.locationName }}</option>
+                }
+              </select>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="mb-3">
+              <label for="toLocation" class="form-label">To Location</label>
+              <select formControlName="toLocation" class="form-select" id="toLocation">
+                <option value="">Select Location</option>
+                @for (location of locations(); track location.locationId) {
+                  <option value="{{ location.locationId }}">{{ location.locationName }}</option>
+                }
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-3">
+            <div class="mb-3">
+              <label for="departureTime" class="form-label">Departure Time</label>
+              <input
+                formControlName="departureTime"
+                type="datetime-local"
+                class="form-control"
+                id="departureTime"
+              />
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="mb-3">
+              <label for="arrivalTime" class="form-label">Arrival Time</label>
+              <input
+                formControlName="arrivalTime"
+                type="datetime-local"
+                class="form-control"
+                id="arrivalTime"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-3">
+            <div class="mb-3">
+              <label for="scheduleDate" class="form-label">Schedule Date</label>
+              <input
+                formControlName="scheduleDate"
+                type="date"
+                class="form-control"
+                id="scheduleDate"
+              />
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="mb-3">
+              <label for="price" class="form-label">Price</label>
+              <input
+                formControlName="price"
+                type="number"
+                class="form-control"
+                id="price"
+                placeholder="Enter price"
+              />
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="mb-3">
+              <label for="totalSeats" class="form-label">Total Seats</label>
+              <input
+                formControlName="totalSeats"
+                type="number"
+                class="form-control"
+                id="totalSeats"
+                placeholder="Enter total seats"
+              />
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-success" [disabled]="busScheduleForm.invalid">
+          Submit
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bus Schedule List Table -->
+  <div class="card mt-5">
+    <div class="card-header bg-secondary text-white">Bus Schedule List</div>
+    <div class="card-body">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Schedule ID</th>
+            <th>Vendor</th>
+            <th>Bus Name</th>
+            <th>From Location</th>
+            <th>To Location</th>
+            <th>Departure Time</th>
+            <th>Arrival Time</th>
+            <th>Schedule Date</th>
+            <th>Price</th>
+            <th>Total Seats</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="scheduleList">
+          <!-- Bus schedule rows will go here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

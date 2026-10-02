@@ -55,4 +55,15 @@ login(credentials: any ): Observable<any> {
     this.currentUser.set(null);
     this.router.navigate(['/login']);
   }
+
+  createVendor(data:any):Observable<any>{
+    return this.apiService.createVendor(data).pipe(
+      tap((res: any) => {
+        if (res.result){
+          localStorage.setItem(this.STORAGE_KEY, JSON.stringify(res.data));
+          this.currentUser.set(res.data )
+        }
+      })
+    );
+  }
 }

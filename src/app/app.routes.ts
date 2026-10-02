@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard, noAuthGaurd } from './guard/auth-guard';
+import { vendorAuthGuard, authGuard, noAuthGaurd } from './guard/auth-guard';
 
 export const routes: Routes = [
     {
@@ -21,6 +21,16 @@ export const routes: Routes = [
         path: 'booking/:id',
         canActivate: [authGuard],
         loadComponent : () => import('./pages/booking/booking').then(m=>m.Booking)
+    },
+    {
+        path: 'schedule',
+        canActivate: [vendorAuthGuard],
+        loadComponent : () => import('./admin/schedule/schedule').then(m=>m.Schedule)
+    },
+    {
+        path: 'bookings',
+        canActivate: [vendorAuthGuard],
+        loadComponent : () => import('./admin/bookings/bookings').then(m => m.Bookings)
     },
     {
         path: '**',

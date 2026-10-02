@@ -17,15 +17,31 @@
         </li>
         <li class="nav-item" style="display: flex;">
           @if(loggedUserdata()){
-            <a class="nav-link text-success" style="cursor: pointer;">
+           @if(loggedUserdata()?.role == 'Vendor'){
+            <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/schedule']"><i class="bi bi-bus me-1"></i>Bus Schedule</a>
+        </li>
+            <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/bookings']"><i class="bi bi-bus me-1"></i>Bookings</a>
+        </li>
+             <a class="nav-link text-success" style="cursor: pointer;">
             <i class="bi bi-person me-1"></i>{{loggedUserdata()?.userName}}
           </a>
             <a class="nav-link text-danger" style="cursor: pointer;" (click)="logOut()">
             <i class="bi bi-person me-1"></i>Logout
           </a>
+           }
+           @else {
+             <a class="nav-link text-success" style="cursor: pointer;">
+            <i class="bi bi-person me-1"></i>{{loggedUserdata()?.userName}}
+          </a>
+            <a class="nav-link text-danger" style="cursor: pointer;" (click)="logOut()">
+            <i class="bi bi-person me-1"></i>Logout
+          </a>
+           }
           }
           @else{
-            <a class="nav-link text-danger" style="cursor: pointer;" (click)="openModel()">
+            <a class="nav-link text-danger" style="cursor: pointer;" routerLink="/login">
             <i class="bi bi-person me-1"></i>Login / Sign Up
           </a>
           }
@@ -90,6 +106,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary w-100 mb-3">Register</button>
+            <button type="button" class="btn btn-success w-100 mb-3" (click)="createVendor()">Create Vendor</button>
 
             <div class="text-center">
               <p class="mb-0">Already a member? 

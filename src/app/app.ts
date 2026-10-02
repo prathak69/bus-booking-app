@@ -2,6 +2,7 @@ import { Component, ElementRef, viewChild, signal, inject, OnInit } from '@angul
 import { FormsModule } from '@angular/forms';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { Master } from './service/master';
+import { Auth as AuthService } from './service/auth';
 
 @Component({
   selector: 'app-root',
@@ -13,8 +14,9 @@ import { Master } from './service/master';
 export class App implements OnInit{
   protected readonly title = signal('bus-booking-app');
   apiService = inject(Master);
+  authService = inject(AuthService);
   isLoginForm = signal(true);
-  loggedUserdata = signal<any>(null);
+  loggedUserdata = this.authService.currentUser;
 
   // Modern Angular signal query for the dialog element
   private readonly authModal = viewChild.required<ElementRef<HTMLDialogElement>>('authDialog');
@@ -102,12 +104,10 @@ export class App implements OnInit{
   }
 
   login(){
-    this.apiService.login(this.loginObj).subscribe({
+    this.authService.login(this.loginObj).subscribe({
       next: (res: any) => {
         if (res.result) {
           alert('Login successful!');
-          localStorage.setItem('currentUser', JSON.stringify(res.data));
-          this.loggedUserdata.set(res.data)
           this.closeModel();
         } else {
           alert(res.message || 'Login failed. The username or password may be incorrect.');
@@ -120,8 +120,25 @@ export class App implements OnInit{
   }
 
   logOut(){
-    localStorage.removeItem('currentUser');
-    this.loggedUserdata.set(null);
+    this.authService.logout();
+  }
+
+  createVendor(){
+    if(!this.registerObj.userName || !this.registerObj.password || !this.registerObj.emailId || !this.registerObj.fullName){
+      alert('Please fill in all required fields.');
+      return;
+    }
+    this.apiService.createVendor(this.registerObj).subscribe({
+      next: (res) =>{
+        console.log("Vendor Created: ",res)
+      },
+      error :(err) =>{
+        console.log("Vendor Creation Error: ",err)
+      },
+      complete: () =>{
+        console.log("Vendor created sucessfully")
+      }
+    })
   }
 
 }

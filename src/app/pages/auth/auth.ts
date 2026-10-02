@@ -97,4 +97,36 @@ export class Auth {
       },
     });
   }
+
+    createVendor(){
+      if(!this.registerObj || !this.registerObj.password || !this.registerObj.emailId || !this.registerObj.fullName){
+        alert("Please fill in all the details");
+        return;
+      }
+      this.authService.createVendor(this.registerObj).subscribe({
+        next: (res)=>{
+          console.log("Vendor Created: ", res);
+        },
+        error: (err) =>{
+          console.log("Vendor Creation Error: ", err);
+        },
+        complete: () =>{
+          console.log("Vendor Created");
+        }
+      })
+  }
+
 }
+
+/*
+
+app.ts:46 Current User:  null
+_debug_node-chunk.mjs:11046 Angular is running in development mode.
+content.js:22 [SmartLens Content] Initializing...
+content.js:438 [SmartLens] Content script loaded
+auth.ts:108 Vendor Created:  Objectdata: nullmessage: "userName Already Exists"result: false[[Prototype]]: Object
+auth.ts:114 Vendor Created
+auth.ts:108 Vendor Created:  {message: 'Vendor Creation Success', result: true, data: {…}}data: createdDate: "2026-10-02T17:23:56.756Z"emailId: "test.test@gmail.com"fullName: "Test"password: "Test@12345"projectName: " BusBooking"refreshToken: ""refreshTokenExpiryTime: "2026-10-02T17:23:56.756Z"role: "Vendor"userId: 15408userName: "Test@69"[[Prototype]]: Objectmessage: "Vendor Creation Success"result: true[[Prototype]]: Object
+auth.ts:114 Vendor Created
+
+*/

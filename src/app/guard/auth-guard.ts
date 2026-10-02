@@ -12,6 +12,16 @@ export const authGuard: CanActivateFn = (route, state) => {
   return router.createUrlTree(['/login']);
 };
 
+export const vendorAuthGuard: CanActivateFn = (route, state) => {
+  const authService = inject(Auth);
+  const router = inject(Router);
+
+  if (authService.isLoggedIn() && authService.currentUser()?.role == 'Vendor') {
+    return true;
+  }
+  return router.createUrlTree(['/login']);
+};
+
 export const noAuthGaurd: CanActivateFn = () => {
   const authService = inject(Auth);
   const router = inject(Router);
