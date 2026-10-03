@@ -55,4 +55,30 @@ export class Master {
   postBusSchedule(busScheduleForm: any) {
     return this.http.post(this.baseUrl + 'PostBusSchedule', busScheduleForm);
   }
+
+  getBusSchedules(vendorId: any) {
+    const params = {
+      vendorId,
+    };
+    return this.http.get(this.baseUrl + 'GetBusSchedules', { params });
+  }
+
+  deleteBusSchedule(scheduleId: any) {
+    const params = {
+      id: scheduleId,
+    };
+
+    return this.http.delete(this.baseUrl + 'DeleteBusSchedule', { params });
+  }
+
+  getAllBusBookings(vendorId: any) {
+    const params = {
+      vendorId,
+    };
+    return this.http.get(this.baseUrl + 'GetAllBusBookings', { params });
+  }
+
+  getAllUsers() {
+    return this.http.get(this.baseUrl + 'GetAllUsers');
+  }
 }

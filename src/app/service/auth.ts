@@ -1,7 +1,7 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Master } from './master';
 import { Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import { Observable, switchMap, map, catchError, of , tap} from 'rxjs';
 
 export interface UserSession {
   userId: string;
@@ -35,13 +35,38 @@ getUserFromStorage():UserSession | null{
   }
 }
 
-login(credentials: any ): Observable<any> {
+  login(credentials: any): Observable<any> {
     return this.apiService.login(credentials).pipe(
-      tap((res: any) => {
-        if (res.result) {
+      switchMap((res: any) => {
+        if (res.result && res.data?.role === 'Customer') {
+          // If customer login returned a vendorId (clash bug in backend API), resolve the true customer userId
+          return this.apiService.getAllUsers().pipe(
+            map((usersRes: any) => {
+              const users = usersRes?.data || [];
+              const matched = users.find(
+                (u: any) =>
+                  (u.userName && u.userName.toLowerCase() === res.data.userName?.toLowerCase()) ||
+                  (u.emailId && u.emailId.toLowerCase() === res.data.emailId?.toLowerCase())
+              );
+              if (matched?.userId) {
+                res.data.userId = matched.userId;
+              }
+              localStorage.setItem(this.STORAGE_KEY, JSON.stringify(res.data));
+              this.currentUser.set(res.data);
+              return res;
+            }),
+            catchError(() => {
+              localStorage.setItem(this.STORAGE_KEY, JSON.stringify(res.data));
+              this.currentUser.set(res.data);
+              return of(res);
+            })
+          );
+        } else if (res.result) {
           localStorage.setItem(this.STORAGE_KEY, JSON.stringify(res.data));
           this.currentUser.set(res.data);
+          return of(res);
         }
+        return of(res);
       })
     );
   }

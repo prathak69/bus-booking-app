@@ -32,6 +32,8 @@ export class Schedule implements OnInit {
 
   currentUser: any;
   scheduledBusDetails = signal<any>(null)
+  scheduledBus = signal<any[]>([]);
+  viewSchedule: boolean = false;
 
   busScheduleForm = this.fb.group({
     scheduleId: 0,
@@ -58,6 +60,7 @@ export class Schedule implements OnInit {
       });
     }
     this.getLocations();
+    this.getBusSchedules();
   }
 
   getLocations() {
@@ -83,7 +86,7 @@ export class Schedule implements OnInit {
   submitBusForm(): void {
     this.apiService.postBusSchedule(this.busScheduleForm.value).subscribe({
       next: (res: any) => {
-        this.scheduledBusDetails.set(res)
+        this.scheduledBusDetails.set(res);
         console.log('res: ', this.scheduledBusDetails());
       },
       error: (err) => {
@@ -91,8 +94,53 @@ export class Schedule implements OnInit {
       },
       complete: () => {
         console.log('Bus Schedule Posted');
-        this.busScheduleForm.reset();
+        this.busScheduleForm.reset({
+          scheduleId: 0,
+          vendorId: Number(this.currentUser?.userId) || 0,
+          busName: '',
+          busVehicleNo: '',
+          fromLocation: '',
+          toLocation: '',
+          departureTime: '',
+          arrivalTime: '',
+          scheduleDate: '',
+          price: '',
+          totalSeats: '',
+        });
+        this.getBusSchedules();
       },
     });
+  }
+
+  getBusSchedules(){
+    this.apiService.getBusSchedules(this.currentUser.userId).subscribe({
+      next : (res:any) =>{
+        this.scheduledBus.set(res);
+        console.log(this.currentUser.userId)
+      },
+      error : (err) =>{
+        console.log("Error fetching bus schedule", err);
+      },
+      complete: () => {
+        console.log("scheduled but fetched");
+      }
+    })
+  }
+
+  deleteBusSchedule(scheduleId:any){
+    this.apiService.deleteBusSchedule(scheduleId).subscribe({
+      next: (res:any) =>{
+        console.log('deleted bus with schedule id: ', scheduleId);
+        console.log("resp: ", res)
+      },
+      error: (err) =>{
+        console.log(`error while deleting bus details with schedule id: ${scheduleId}`, err);
+      }
+      ,complete: () =>{
+        console.log(`Bus deleted successfully with schedule id: ${scheduleId}`);
+        this.getBusSchedules();
+        
+      }
+    })
   }
 }
