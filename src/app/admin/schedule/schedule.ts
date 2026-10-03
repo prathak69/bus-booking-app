@@ -20,7 +20,7 @@ export interface BusLocation {
 @Component({
   selector: 'app-schedule',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './schedule.html',
   styleUrl: './schedule.scss',
 })
